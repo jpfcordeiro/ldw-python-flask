@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Games</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Bem vindo à página de Games!</h1>
-    <hr>    
-</body>
+    <hr />
+    {#Comentário em jinja 2#} {#O jinja serve para inserir python em html#}
+    {%for key, value in game.items()%} {{key}} : {{value}} <br />
+    {%endfor%}
+    <p>O jogo {{game['titulo']}} está sendo jogado por:</p>
+    <ol>
+      {#Porcentagem para blocos de código#} {%for j in jogadores: %}
+      <li>{{j}}</li>
+      {% endfor %}
+    </ol>
+    <hr />
+    <h3>Entrar no jogo:</h3>
+    <form action="{{url_for('gamePage')}}" method="post">
+      <label>Jogador:</label>
+      <input type="text" name="jogador" />
+      <input type="submit" />
+    </form>
+    <p>O jogo {{game['titulo']}} tem {{2025 - game['ano']}} anos</p>
+  </body>
 </html>
