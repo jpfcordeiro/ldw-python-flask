@@ -1,0 +1,6 @@
+{% extends "base.html" %} {% block content %}
+<h1>Bem vindo à homepage!</h1>
+<h2>Iniciando os estudos com Flask!</h2>
+<!-- Referenciando a função-->
+<a href="{{url_for('gamePage')}}">Acessar a página de Games</a>
+{% endblock content %}
