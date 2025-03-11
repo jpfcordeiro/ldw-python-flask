@@ -1,0 +1,22 @@
+{%extends 'base.html'%} {#O extends serve para herdar o código de outro arquivo#} {#O base.html é o arquivo que contém o código html que será herdado#}
+{%block content%} {#O block serve para inserir o conteúdo da página#}
+    <h1>Bem vindo à página de Games!</h1>
+    <hr />
+    {#Comentário em jinja 2#} {#O jinja serve para inserir python em html#}
+    {%for key, value in game.items()%} {{key}} : {{value}} <br />
+    {%endfor%}
+    <p>O jogo {{game['titulo']}} está sendo jogado por:</p>
+    <ol>
+      {#Porcentagem para blocos de código#} {%for j in jogadores: %}
+      <li>{{j}}</li>
+      {% endfor %}
+    </ol>
+    <hr />
+    <h3>Entrar no jogo:</h3>
+    <form action="{{url_for('gamePage')}}" method="post">
+      <label>Jogador:</label>
+      <input type="text" name="jogador" />
+      <input type="submit" />
+    </form>
+    <p>O jogo {{game['titulo']}} tem {{2025 - game['ano']}} anos</p>
+  {%endblock content%}
