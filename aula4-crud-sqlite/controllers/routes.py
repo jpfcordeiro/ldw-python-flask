@@ -60,12 +60,40 @@ def init_app(app):
         return render_template('apigames.html', data=data)
 
     @app.route('/estoque', methods=['GET', 'POST'])
-    def estoque():
+    @app.route('/estoque/delete/<int:id>', methods=['GET', 'POST'])
+    def estoque(id=None):
+        if id:
+            game = Game.query.get(id)
+            db.session.delete(game)
+            db.session.commit()
+            return redirect(url_for('estoque'))
         if request.method == 'POST':
             newgame = Game(request.form['titulo'], request.form['ano'], request.form['categoria'],
                            request.form['plataforma'], request.form['preco'], request.form['quantidade'])
             db.session.add(newgame)
             db.session.commit()
             return redirect(url_for('estoque'))
-        gamesestoque = Game.query.all()
-        return render_template('estoque.html', games=gamesestoque)
+        else:
+            #paginação
+            page = request.args.get('page', 1, type=int)
+            #Valor padrão de registros por pag
+            per_page = 5
+            #Faz o select baseado na paginação
+            games_page = Game.query.paginate(page=page, per_page=per_page)
+            
+            # gamesestoque = Game.query.all()
+            return render_template('estoque.html', games=games_page)
+    
+    @app.route('/edit/<int:id>', methods=['GET', 'POST'])
+    def edit(id):
+        game = Game.query.get(id)
+        if request.method == 'POST':
+            game.titulo = request.form['titulo']
+            game.ano = request.form['ano']
+            game.categoria = request.form['categoria']
+            game.plataforma = request.form['plataforma']
+            game.preco = request.form['preco']
+            game.quantidade = request.form['quantidade']
+            db.session.commit()
+            return redirect(url_for('estoque'))
+        return render_template('editgame.html', game=game)
