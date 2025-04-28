@@ -35,5 +35,27 @@ class MovieDetail(Resource):
         movieService.delete_movie(movie_id)
         return make_response(jsonify({'message': 'Movie deleted'}), 200)
 
+    def get(self, movie_id):
+        movie = movieService.getMovie(movie_id)
+        if movie is None:
+            return make_response(jsonify({'message': 'Movie not found'}), 404)
+        mv = movieSchema.MovieSchema()
+        res = mv.jsonify(movie)
+        return make_response(res, 200)
 
-            
+    def put(self, movie_id):
+        movie = movieService.getMovie(movie_id)
+        if movie is None:
+            return make_response(jsonify({'message': 'Movie not found'}), 404)
+        mv = movieSchema.MovieSchema()
+        validate = mv.validate(request.json)
+        if validate:
+            return make_response(jsonify(validate), 400)
+        else:
+            title = request.json['title']
+            year = request.json['year']
+            description = request.json['description']
+            newMovie = movieModel.Movie(title = title, year = year, description = description)
+            result = movieService.update_movie(movie_id, newMovie)
+            res = mv.jsonify(result)
+            return make_response(res, 200)
